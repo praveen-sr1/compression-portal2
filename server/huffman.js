@@ -54,18 +54,19 @@ function generateCodes(node, prefix = '', codeMap = {}) {
 
 // --- EXPORTED FUNCTIONS ---
 
-function compressHuffman(text) {
-    if (!text) {
+function compressHuffman(buffer) {
+    if (!buffer || buffer.length === 0) {
         return Buffer.from([]);
     }
 
-    const freqMap = getFrequencyMap(text);
+    const freqMap = getFrequencyMap(buffer);
     const tree = buildHuffmanTree(freqMap);
     const codes = generateCodes(tree);
 
     let encodedText = '';
-    for (const char of text) {
-        encodedText += codes[char];
+    // Iterate over the buffer to encode
+    for (const byte of buffer) {
+        encodedText += codes[byte];
     }
 
     const paddingLength = (8 - (encodedText.length % 8)) % 8;
@@ -77,25 +78,21 @@ function compressHuffman(text) {
         compressedBytes[i / 8] = parseInt(byte, 2);
     }
     
-    // The frequency map is needed for decompression. We serialize it as JSON.
     const treeData = JSON.stringify(Array.from(freqMap.entries()));
     const treeBuffer = Buffer.from(treeData, 'utf-8');
     
-    // Create a header: [1 byte for padding length][4 bytes for JSON length]
     const headerBuffer = Buffer.alloc(5);
     headerBuffer.writeUInt8(paddingLength, 0);
     headerBuffer.writeUInt32BE(treeBuffer.length, 1);
 
-    // Combine header, tree data, and compressed data into a single buffer
     return Buffer.concat([headerBuffer, treeBuffer, Buffer.from(compressedBytes)]);
 }
 
 function decompressHuffman(compressedBuffer) {
     if (compressedBuffer.length < 5) {
-        return ''; // Not a valid compressed file
+        return Buffer.from([]);
     }
     
-    // Read header to extract metadata
     const paddingLength = compressedBuffer.readUInt8(0);
     const treeJsonLength = compressedBuffer.readUInt32BE(1);
     
@@ -112,22 +109,28 @@ function decompressHuffman(compressedBuffer) {
 
     encodedText = encodedText.slice(0, encodedText.length - paddingLength);
     
-    // Handle single-character files
+    const decodedBytes = [];
+    let currentNode = tree;
+
+    // Handle single-byte files
     if (!tree.left && !tree.right) {
-        return tree.char.repeat(freqMap.get(tree.char));
+        const byte = tree.char;
+        const count = freqMap.get(byte);
+        for (let i = 0; i < count; i++) {
+            decodedBytes.push(byte);
+        }
+        return Buffer.from(decodedBytes);
     }
 
-    let decodedText = '';
-    let currentNode = tree;
     for (const bit of encodedText) {
         currentNode = (bit === '0') ? currentNode.left : currentNode.right;
         if (currentNode.char !== null) {
-            decodedText += currentNode.char;
+            decodedBytes.push(currentNode.char);
             currentNode = tree;
         }
     }
     
-    return decodedText;
+    return Buffer.from(decodedBytes);
 }
 
 module.exports = { compressHuffman, decompressHuffman };

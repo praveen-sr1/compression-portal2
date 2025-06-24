@@ -21,7 +21,7 @@ app.post('/process', upload.single('file'), (req, res) => {
     }
 
     const { algorithm, action } = req.body;
-    const fileBuffer = req.file.buffer;
+   
     const originalSize = fileBuffer.length;
     let processedData;
     let processingTime;
@@ -32,11 +32,12 @@ app.post('/process', upload.single('file'), (req, res) => {
         if (action === 'compress') {
             switch (algorithm) {
                 case 'rle':
-                    processedData = Buffer.from(compressRLE(fileBuffer.toString()));
+                   
+                    processedData = compressRLE(fileBuffer); 
                     break;
                 case 'huffman':
-                    // Note: Huffman works on the text content of the file
-                    processedData = compressHuffman(fileBuffer.toString());
+                    
+                    processedData = compressHuffman(fileBuffer); 
                     break;
                 default:
                     return res.status(400).json({ error: 'Invalid algorithm selected.' });
@@ -44,10 +45,12 @@ app.post('/process', upload.single('file'), (req, res) => {
         } else if (action === 'decompress') {
             switch (algorithm) {
                 case 'rle':
-                    processedData = Buffer.from(decompressRLE(fileBuffer.toString()));
+                   
+                    processedData = decompressRLE(fileBuffer); 
                     break;
                 case 'huffman':
-                    processedData = Buffer.from(decompressHuffman(fileBuffer));
+                   
+                    processedData = decompressHuffman(fileBuffer);
                     break;
                 default:
                     return res.status(400).json({ error: 'Invalid algorithm selected.' });
@@ -55,7 +58,8 @@ app.post('/process', upload.single('file'), (req, res) => {
         } else {
             return res.status(400).json({ error: 'Invalid action selected.' });
         }
-
+        
+       
         const endTime = performance.now();
         processingTime = (endTime - startTime).toFixed(2);
 
