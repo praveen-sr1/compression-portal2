@@ -10,8 +10,7 @@ This project is a web application that allows users to upload files, apply vario
 -   **Compression Statistics**: Displays original size, processed size, compression ratio, and processing time.
 -   **Download Processed Files**: Allows users to download the resulting compressed or decompressed file.
 -   **Algorithm Explanations**: Provides brief descriptions of the available compression algorithms.
--   **Error Handling**: Gives clear feedback for unsupported operations or decompression errors.
--   **Responsive UI**: A clean and intuitive frontend built with React.
+
 
 ## Tech Stack
 
