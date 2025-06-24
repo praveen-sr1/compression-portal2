@@ -19,7 +19,7 @@ app.post('/process', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });
     }
-
+      const fileBuffer = req.file.buffer;
     const { algorithm, action } = req.body;
    
     const originalSize = fileBuffer.length;
