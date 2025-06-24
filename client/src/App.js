@@ -32,11 +32,12 @@ function App() {
         formData.append('action', action);
 
         try {
-            const response = await axios.post('http://localhost:5000/process', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+          const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const response = await axios.post(`${apiUrl}/process`, formData, {
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+});
             setResult(response.data);
         } catch (err) {
             setError(err.response?.data?.error || 'An unexpected error occurred.');
