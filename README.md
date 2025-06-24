@@ -33,7 +33,7 @@ This project is a web application that allows users to upload files, apply vario
 ### 1. Clone the Repository
 
 ```
-git clone <your-repo-url>
+git clone https://github.com/praveen-sr1/compression-portal2
 cd compression-portal2
 ```
 
