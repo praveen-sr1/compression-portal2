@@ -5,7 +5,7 @@ This project is a web application that allows users to upload files, apply vario
 ## Features
 
 -   **File Upload**: Upload any file (text, image, binary) for processing.
--   **Multiple Compression Algorithms**: Supports both Gzip (zlib) and Run-Length Encoding (RLE).
+-   **Multiple Compression Algorithms**: Supports both Huffman and Run-Length Encoding (RLE).
 -   **Compression & Decompression**: Perform both compress and decompress operations.
 -   **Compression Statistics**: Displays original size, processed size, compression ratio, and processing time.
 -   **Download Processed Files**: Allows users to download the resulting compressed or decompressed file.
@@ -35,7 +35,7 @@ This project is a web application that allows users to upload files, apply vario
 
 ```
 git clone <your-repo-url>
-cd compression-portal
+cd compression-portal2
 ```
 
 ### 2. Setup the Backend
