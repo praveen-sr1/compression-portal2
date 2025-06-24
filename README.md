@@ -23,7 +23,7 @@ This project is a web application that allows users to upload files, apply vario
     -   Runtime: **Node.js**
     -   Framework: **Express.js**
     -   File Handling: **multer**
-    -   Compression: **zlib** (built-in), custom RLE implementation
+    -   Compression: **Huffman** ,  **RLE** 
 
 ## Local Setup Instructions
 
